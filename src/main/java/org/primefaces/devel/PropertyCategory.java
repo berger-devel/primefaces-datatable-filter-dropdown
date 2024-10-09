@@ -1,4 +1,4 @@
-package org.primefaces.test;
+package org.primefaces.devel;
 
 public enum PropertyCategory {
     A, B, C

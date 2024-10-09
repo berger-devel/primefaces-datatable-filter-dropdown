@@ -5,9 +5,52 @@
                 xmlns:c="jakarta.tags.core"
                 xmlns:h="jakarta.faces.html"
                 xmlns:p="http://primefaces.org/ui">
-        <f:view>
-            <div>
-                <p:commandButton value="Open" actionListener="#{testView.toggleView}" ajax="false"/>
-            </div>
-        </f:view>
+    <h:form>
+        <p:commandLink value="Close" action="#{testView.closeDetails}" ajax="false" />
+        <p:panelGrid columns="2" style="width: 300px;">
+            <h:outputLabel value="Object ID:"/>
+            <h:outputText value="#{testView.currentObject.id}"/>
+            <h:outputLabel value="Property:"/>
+            <p:outputPanel>
+                <h:outputText value="#{testView.currentObject.property.id}"/>
+                (<p:commandLink value="change"
+                               action="#{testView.showProperties()}"
+                               ajax="false"
+                />)
+            </p:outputPanel>
+            <h:outputLabel value="Property Category:"/>
+            <h:outputText value="#{testView.currentObject.property.category}"/>
+        </p:panelGrid>
+    </h:form>
+
+    <p:panel rendered="#{testView.displayProperties}">
+        <h:form>
+            <p:commandButton value="Cancel" action="#{testView.hideProperties()}" ajax="false" />
+            <p:dataTable id="propertiesDataTable" widgetVar="propertiesDataTable"
+                         value="#{testView.propertiesModel}"
+                         paginator="true"
+                         lazy="true"
+                         rows="10"
+                         var="property"
+                         size="small"
+            >
+                <p:column headerText="#">
+                    <p:commandLink value="#{property.id}" action="#{testView.assignProperty(property)}"/>
+                </p:column>
+                <p:column headerText="Category" filterBy="#{property.category}" filterOptions="#{testView.categoryFilters}" filterMatchMode="exact">
+                    <f:facet name="filter">
+                        <p:selectOneMenu id="filter"
+                                         value="#{testView.categoryFilter}"
+                                         onchange="PF('propertiesDataTable').filter();"
+                        >
+                            <f:selectItem itemLabel="All" itemValue="#{null}" >test</f:selectItem>
+                            <f:selectItems value="#{testView.categoryFilters}"/>
+                        </p:selectOneMenu>
+                    </f:facet>
+
+                    <h:outputText value="#{property.category}"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </p:panel>
 </ui:composition>

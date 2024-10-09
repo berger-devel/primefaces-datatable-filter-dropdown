@@ -1,4 +1,4 @@
-package org.primefaces.test;
+package org.primefaces.devel;
 
 import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
@@ -22,17 +22,22 @@ public class TestData extends LazyDataModel<PropertyOfObject> {
 
     @Override
     public List<PropertyOfObject> load(int first, int pageSize, Map<String, SortMeta> sortBy, Map<String, FilterMeta> filterBy) {
+
+        setWrappedData(filter(filterBy).skip(first).limit(pageSize).toList());
+        return getWrappedData();
+    }
+
+    @Override
+    public int count(Map<String, FilterMeta> filterBy) {
+        return Math.toIntExact(filter(filterBy).count());
+    }
+
+    private Stream<PropertyOfObject> filter(Map<String, FilterMeta> filterBy) {
         Stream<PropertyOfObject> propertiesStream = properties.stream();
         FilterMeta filterMeta = filterBy.get("category");
         if (filterMeta != null) {
             propertiesStream = propertiesStream.filter(property -> Objects.equals(filterMeta.getFilterValue(), property.getCategory()));
         }
-        setWrappedData(propertiesStream.skip(first).limit(pageSize).toList());
-        return getWrappedData();
-    }
-
-    @Override
-    public int count(Map<String, FilterMeta> map) {
-        return properties.size();
+        return propertiesStream;
     }
 }

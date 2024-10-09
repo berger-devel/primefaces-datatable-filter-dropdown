@@ -19,12 +19,6 @@
         <param-value>saga</param-value>
     </context-param>
 
-    <context-param>
-        <description>used to define the main spring configuration file</description>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>/WEB-INF/spring/applicationContext.xml</param-value>
-    </context-param>
-
     <servlet>
         <servlet-name>facesServlet</servlet-name>
         <servlet-class>jakarta.faces.webapp.FacesServlet</servlet-class>
@@ -33,18 +27,6 @@
         <servlet-name>facesServlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
-
-    <listener>
-        <description>Spring ContextListener which initializes Spring</description>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
-    <listener>
-        <description>When using a Servlet 2.4+ web container, with requests processed outside of Spring's
-            DispatcherServlet (e.g. when using JSF or Struts), you need to add the following
-            jakarta.servlet.ServletRequestListener to the declarations in your web application's 'web.xml' file.
-        </description>
-        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
-    </listener>
 
     <mime-mapping>
         <extension>ttf</extension>

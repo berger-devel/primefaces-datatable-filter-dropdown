@@ -6,14 +6,23 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:c="jakarta.tags.core">
 
-    <div>
-        <p:commandButton value="Close" actionListener="#{testView.toggleView}" ajax="false" />
-    </div>
-
-    <div>
-        <p:selectOneMenu id="option" value="#{testView.selectedOption}">
-            <f:selectItems value="#{testView.options}" var="codeGroup">
-            </f:selectItems>
-        </p:selectOneMenu>
-    </div>
+    <h:form>
+        <p:dataTable value="#{testView.objects}"
+                     rows="#{testView.objects.size()}"
+                     id="myDataTable"
+                     widgetVar="objectsDataTable"
+                     var="row">
+            <p:column headerText="#">
+                <p:commandLink action="#{testView.showDetails(row.id)}" ajax="false">
+                    <h:outputText value="#{row.id}"/>
+                </p:commandLink>
+            </p:column>
+            <p:column headerText="Property">
+                <h:outputText value="#{row.property.id}"/>
+            </p:column>
+            <p:column headerText="Property Category">
+                <h:outputText value="#{row.property.category}"/>
+            </p:column>
+        </p:dataTable>
+    </h:form>
 </ui:composition>

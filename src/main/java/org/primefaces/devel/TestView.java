@@ -1,4 +1,4 @@
-package org.primefaces.test;
+package org.primefaces.devel;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.model.SelectItem;
@@ -6,6 +6,7 @@ import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -15,9 +16,7 @@ import java.util.stream.Stream;
 public class TestView implements Serializable {
 
     private TestData propertiesModel;
-    private List<PropertyOfObject> filteredProperties;
     private List<TestObject> objects;
-    private List<TestObject> filteredObjects;
     private TestObject currentObject;
     private boolean displayProperties;
     private PropertyCategory categoryFilter;
@@ -26,7 +25,7 @@ public class TestView implements Serializable {
     public void init() {
         propertiesModel = new TestData();
         objects = IntStream.range(0, 7).mapToObj(
-                i -> new TestObject(i, propertiesModel.getWrappedData().get(i % propertiesModel.count(null)))
+                i -> new TestObject(i, propertiesModel.getWrappedData().get(i % propertiesModel.count(Collections.emptyMap())))
         ).toList();
     }
 
@@ -38,14 +37,6 @@ public class TestView implements Serializable {
         return propertiesModel;
     }
 
-    public void setFilteredProperties(List<PropertyOfObject> filteredProperties) {
-        this.filteredProperties = filteredProperties;
-    }
-
-    public List<PropertyOfObject> getFilteredProperties() {
-        return filteredProperties;
-    }
-
     public TestObject getCurrentObject() {
         return currentObject;
     }
@@ -54,7 +45,7 @@ public class TestView implements Serializable {
         return currentObject != null;
     }
 
-    public void viewDetails(String objectId) {
+    public void showDetails(String objectId) {
         currentObject = objects.stream().filter(o -> o.getId().equals(objectId)).findFirst().orElse(null);
     }
 
@@ -67,9 +58,18 @@ public class TestView implements Serializable {
         return displayProperties;
     }
 
-    public void setDisplayProperties(boolean displayProperties) {
-        this.displayProperties = displayProperties;
+    public void showProperties()
+    {
+        displayProperties = true;
         categoryFilter = currentObject.getProperty().getCategory();
+    }
+
+    public void hideProperties() {
+        displayProperties = false;
+    }
+
+    public List<SelectItem> getCategoryFilters() {
+        return Stream.of(PropertyCategory.values()).map(SelectItem::new).toList();
     }
 
     public void setCategoryFilter(PropertyCategory categoryFilter) {
@@ -80,19 +80,9 @@ public class TestView implements Serializable {
         return categoryFilter;
     }
 
-    public List<SelectItem> getCategoryFilters() {
-        return Stream.of(PropertyCategory.values()).map(SelectItem::new).toList();
-    }
-
-    public void assignCategory() {
-        int a = 0;
-    }
-
-    public List<TestObject> getFilteredObjects() {
-        return filteredObjects;
-    }
-
-    public void setFilteredObjects(List<TestObject> filteredObjects) {
-        this.filteredObjects = filteredObjects;
+    public void assignProperty(PropertyOfObject property) {
+        hideProperties();
+        setCategoryFilter(null);
+        currentObject.setProperty(property);
     }
 }

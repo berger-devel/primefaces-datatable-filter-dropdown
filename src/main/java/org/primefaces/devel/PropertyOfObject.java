@@ -1,4 +1,4 @@
-package org.primefaces.test;
+package org.primefaces.devel;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

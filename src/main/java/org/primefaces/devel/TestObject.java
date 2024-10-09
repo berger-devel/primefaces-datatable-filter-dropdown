@@ -1,7 +1,7 @@
-package org.primefaces.test;
+package org.primefaces.devel;
 
 import java.io.Serializable;
-import java.util.UUID;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
