@@ -35,9 +35,9 @@
                          size="small"
             >
                 <p:column headerText="#">
-                    <p:commandLink value="#{property.id}" action="#{testView.assignProperty(property)}"/>
+                    <p:commandLink value="#{property.id}" action="#{testView.assignProperty(property)}" ajax="false"/>
                 </p:column>
-                <p:column headerText="Category" filterBy="#{property.category}" filterOptions="#{testView.categoryFilters}" filterMatchMode="exact">
+                <p:column headerText="Category" filterBy="#{property.category}">
                     <f:facet name="filter">
                         <p:selectOneMenu id="filter"
                                          value="#{testView.categoryFilter}"
